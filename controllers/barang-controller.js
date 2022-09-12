@@ -36,8 +36,19 @@ const deleteData = (req, res) => {
 
 const searchData = (req, res) => {
   const queryUrl = {...req.query}
-  const sql = `SELECT * FROM barang WHERE nomor_material like '%${queryUrl.nomorMaterial}%' OR nama_material like '%${queryUrl.namaMaterial}%'`
-  searchBarang(res,sql)
+  const sqlSearchIncoming = `SELECT * FROM transaction
+    INNER JOIN barang on barang.nomor_material = transaction.nomor_material
+    WHERE barang.nomor_material = '${queryUrl.nomorMaterial}' 
+    OR barang.nama_material like '%${queryUrl.namaMaterial}%'
+    AND transaction.type = 'incoming'`
+
+    console.log(sqlSearchIncoming,"aaa")
+
+  const sql = `SELECT * FROM barang 
+    WHERE nomor_material like '%${queryUrl.nomorMaterial}%' 
+    OR nama_material like '%${queryUrl.namaMaterial}%'`
+
+  searchBarang(res,sql,queryUrl,sqlSearchIncoming)
 }
 
 module.exports = {

@@ -55,11 +55,27 @@ const deleteBarang = (res, searchStatement, deleteStatement, id) => {
   });
 };
 
-const searchBarang = (res, query) => {
-  connection.query(query,(err,rows,field)=> {
-    if(err) return res.status(500).json({ message: 'Ada kesalahan', error: err});
-    responseData(res, 200, {rows});
-  })
+const searchBarang = (res, query, queryUrl, querySearchIncoming) => {
+  if(!queryUrl.nomorMaterial && !queryUrl.namaMaterial) {
+    responseData(res, 200, {rows:[]})
+  }else if(queryUrl?.type && queryUrl?.type === 'outgoing'){
+    connection.query(querySearchIncoming,(err,incomingLocation,field)=> {
+      if(err) return res.status(500).json({ message: 'Ada kesalahan', error: err});
+      if(incomingLocation.length > 0){
+        connection.query(query,(err,rows,field)=> {
+          if(err) return res.status(500).json({ message: 'Ada kesalahan', error: err});
+          responseData(res, 200, {rows,incomingLocation});
+        })
+      }else{
+        responseData(res, 200, {rows:[]})
+      }
+    })
+  }else{
+    connection.query(query,(err,rows,field)=> {
+      if(err) return res.status(500).json({ message: 'Ada kesalahan', error: err});
+      responseData(res, 200, {rows});
+    })
+  }
 }
 
 module.exports = {

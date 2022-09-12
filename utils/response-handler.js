@@ -7,10 +7,11 @@ const responseData = function (response, statusCode, values) {
   response.end();
 };
 
-const responseMessage = function (response, statusCode, message) {
+const responseMessage = function (response, statusCode, message,additionalData=null) {
   var data = {
       success: true,
       message: message,
+      data:additionalData
   };
   response.status(statusCode).json(data);
   response.end();

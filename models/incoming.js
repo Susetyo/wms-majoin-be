@@ -11,7 +11,6 @@ const getQty = async(nomor_material) => {
 
 const incoming = async(res, statement,body) => {
   const {id, qty} = await getQty(body.nomor_material)
-  console.log({id, qty})
   const qtyNew = parseInt(body.qty) + qty;
   const data = {
     ...body,
