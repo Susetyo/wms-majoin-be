@@ -4,9 +4,9 @@ const mysql = require('mysql');
 // buat konfigurasi koneksi
 const connection = mysql.createConnection({
     host: 'localhost',
-    user: 'majoinco_admin',
+    user: 'majoinco_root',
     password: 'plokijuh1234!',
-    database: 'majoinco_wms',
+    database: 'majoinco_db',
     multipleStatements: true
 });
 
