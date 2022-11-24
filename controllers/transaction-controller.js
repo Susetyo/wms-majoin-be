@@ -29,8 +29,10 @@ const readData = (req, res) => {
     param=''
   }
 
-  const querySql = `SELECT barang.nama_material,transaction.* FROM barang 
-  inner join transaction on transaction.nomor_material = barang.nomor_material ${param} ${orderBy} LIMIT ${queryString.limit} OFFSET ${queryString.offset}`;
+  const querySql = `SELECT user.username,barang.nama_material,transaction.* FROM barang 
+  inner join transaction on transaction.nomor_material = barang.nomor_material 
+  inner join user on transaction.user_id = user.id
+  ${param} ${orderBy} LIMIT ${queryString.limit} OFFSET ${queryString.offset}`;
   getTransaction(res, querySql);
 };
 
@@ -38,7 +40,9 @@ const searchData = (req, res) => {
   const queryString = {...req.query}
   const search = queryString.keyword ? `where transaction.nomor_material LIKE '%${queryString.keyword}%' or barang.nama_material LIKE '%${queryString.keyword}%'` : '';
   const sql = `SELECT barang.nama_material,transaction.* FROM barang 
-  inner join transaction on transaction.nomor_material = barang.nomor_material ${search}`
+  inner join transaction on transaction.nomor_material = barang.nomor_material 
+  inner join user on transaction.user_id = user.id
+  ${search}`
   searchTransaction(res,sql)
 }
 
