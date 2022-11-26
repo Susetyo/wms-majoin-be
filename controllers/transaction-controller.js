@@ -5,9 +5,9 @@ const {
 
 const readData = (req, res) => {
   const queryString = { ...req.query }
-  const search = queryString.keyword ? `transaction.nomor_material LIKE '%${queryString.keyword}%' or barang.nama_material LIKE '%${queryString.keyword}%'` : '';
-  const range = queryString.startDate && queryString.endDate ? `transaction.date between '${queryString.startDate}' and '${queryString.endDate}'`: '';
-  const type = queryString.type ? `transaction.type = '${queryString.type}'` : ``;
+  const search = queryString.keyword ? `transaction.nomor_material LIKE '%${queryString.keyword}%' or barang.nama_material LIKE '%${queryString.keyword}%'` :null;
+  const range = queryString.startDate && queryString.endDate ? `transaction.date between '${queryString.startDate}' and '${queryString.endDate}'`: null;
+  const type = queryString.type ? `transaction.type = '${queryString.type}'` : null;
   const orderBy = range ? 'order by transaction.date asc' : 'order by transaction.date desc'
 
   let param = 'where ';
@@ -29,10 +29,14 @@ const readData = (req, res) => {
     param=''
   }
 
+  const limit = queryString.limit ? `LIMIT ${queryString.limit}` : '';
+  const offset = queryString.limit ? `OFFSET ${queryString.offset}` : '';
+
   const querySql = `SELECT user.username,barang.nama_material,transaction.* FROM barang 
   inner join transaction on transaction.nomor_material = barang.nomor_material 
   inner join user on transaction.user_id = user.id
-  ${param} ${orderBy} LIMIT ${queryString.limit} OFFSET ${queryString.offset}`;
+  ${param} ${orderBy} ${limit} ${offset}`;
+
   getTransaction(res, querySql);
 };
 
