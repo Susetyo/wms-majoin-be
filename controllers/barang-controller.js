@@ -15,7 +15,7 @@ const createData = (req, res) => {
 const readData = (req, res) => {
   const queryString = { ...req.query }
   const search = queryString.keyword ? `where nomor_material LIKE '%${queryString.keyword}%' or nama_material LIKE '%${queryString.keyword}%'` : '';
-  const querySql = `SELECT * FROM barang ${search} LIMIT ${queryString.limit} OFFSET ${queryString.offset};`;
+  const querySql = `SELECT * FROM barang ${search} order by id desc LIMIT ${queryString.limit} OFFSET ${queryString.offset};`;
   getBarang(res, querySql);
 };
 
